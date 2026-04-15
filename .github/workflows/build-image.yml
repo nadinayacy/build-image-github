@@ -18,13 +18,11 @@ jobs:
         run: docker history imageku:latest
 
         -name: Login to Github Registry
-        run: echo ${{ secrets.TOKEN_GITHUB }} | docker login
-ghcr.io -u nadinayacy --password-stdin
+        run: echo ${{ secrets.TOKEN_GITHUB }} | docker login ghcr.io -u nadinayacy --password-stdin
 
       - name: Tag image
         run: docker tag imageku
 ghcr.io/nadinayacy/imageku:latest
 
       - name: Push Image
-        run: docker push
-ghcr.io/nadinayacy/imageku:latest
+        run: docker push ghcr.io/nadinayacy/imageku:latest
