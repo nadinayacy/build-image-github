@@ -1,0 +1,36 @@
+name: Build and Push Image
+run-name: Build and Push Image
+on: [push]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-push-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t build-image-github .
+
+      - name: List image
+        run: docker images
+
+      - name: Cek isi image
+        run: docker history build-image-github:latest
+
+      - name: Login ke Github Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.TOKEN_GITHUB }}
+
+      - name: Tag image
+        run: docker tag build-image-github ghcr.io/nadinayacy/build-image-github:latest
+
+      - name: Push Image
+        run: docker push ghcr.io/nadinayacy/build-image-github:latest
